@@ -7,6 +7,7 @@ A simplified AI-driven web application for conducting AWS migration assessments 
 - **Excel Template Upload**: Consultants upload assessment questionnaires in Excel format
 - **Project Context**: Capture client name, project name, and overview for personalized AI interactions
 - **Smart Q&A**: AI assistant asks questions intelligently based on project context
+- **Voice Interaction**: Full voice support with speech-to-text and text-to-speech capabilities
 - **Progress Tracking**: Real-time progress bar showing completion percentage
 - **Export Results**: Download completed assessment with all answers in Excel format
 
@@ -46,6 +47,7 @@ A simplified AI-driven web application for conducting AWS migration assessments 
 
 3. **Answer Questions**:
    - AI asks questions one by one
+   - Use voice or text input
    - Questions are prioritized (mandatory first)
    - AI validates answers based on sufficiency rules
    - Skip non-applicable questions
@@ -53,6 +55,14 @@ A simplified AI-driven web application for conducting AWS migration assessments 
 4. **Export Results**:
    - Click "Export" button anytime
    - Downloads Excel with all answers filled
+
+## Voice Features
+
+- Click the microphone button to enable voice mode
+- AI automatically speaks questions
+- After AI finishes speaking, it listens for your response
+- Voice commands supported: "skip question", "I don't know", "not applicable"
+- Visual feedback shows listening, processing, and speaking states
 
 ## Project Structure
 
@@ -65,10 +75,13 @@ src/
 │   │   └── export/         # Excel export
 │   ├── upload/             # Upload page
 │   └── session/[id]/       # Chat interface
+├── hooks/
+│   └── useVoiceInteraction.ts  # Voice interaction hook
 ├── lib/
 │   ├── excel.ts           # Excel parsing/generation
 │   ├── sessions.ts        # Session management
-│   └── ai-assistant.ts    # AI logic
+│   ├── ai-assistant.ts    # AI logic
+│   └── voice.ts           # Voice utilities
 └── types/                 # TypeScript definitions
 ```
 
@@ -76,6 +89,7 @@ src/
 
 - **Frontend**: Next.js 14, React, Tailwind CSS
 - **AI**: OpenAI GPT-3.5 Turbo
+- **Voice**: Web Speech API (Speech Recognition & Synthesis)
 - **Storage**: Local file system (sessions stored in `data/sessions/`)
 - **Excel**: xlsx package for parsing/generating Excel files
 
