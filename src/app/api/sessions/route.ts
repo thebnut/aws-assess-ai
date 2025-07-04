@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import formidable from 'formidable'
-import { promises as fs } from 'fs'
 import { createSession } from '@/lib/sessions'
 import { parseQuestionsFromExcel } from '@/lib/excel'
 import { SessionContext } from '@/types'
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
 
 export async function POST(req: NextRequest) {
   try {
