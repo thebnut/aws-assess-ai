@@ -208,13 +208,7 @@ export default function SessionPage() {
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container">
-          {process.env.NODE_ENV === 'production' && (
-            <div className="bg-amber-50 dark:bg-amber-950 border-b border-amber-200 dark:border-amber-800 py-2 px-4 text-center">
-              <p className="text-xs text-amber-800 dark:text-amber-200">
-                <strong>Demo Mode:</strong> Complete your assessment in one session - progress is not saved permanently.
-              </p>
-            </div>
-          )}
+          {/* Production warning - removed process.env check as it's not available client-side */}
           <div className="flex items-center justify-between py-4">
             <div>
               <h1 className="text-xl font-semibold">

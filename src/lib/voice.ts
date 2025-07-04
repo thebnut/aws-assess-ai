@@ -15,12 +15,19 @@ export class VoiceRecognition {
 
   constructor() {
     if (typeof window !== 'undefined') {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-      if (SpeechRecognition) {
-        this.recognition = new SpeechRecognition()
-        this.recognition.continuous = false
-        this.recognition.interimResults = true
-        this.recognition.lang = 'en-US'
+      try {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+        console.log('[Voice] SpeechRecognition available:', !!SpeechRecognition)
+        
+        if (SpeechRecognition) {
+          this.recognition = new SpeechRecognition()
+          this.recognition.continuous = false
+          this.recognition.interimResults = true
+          this.recognition.lang = 'en-US'
+          console.log('[Voice] SpeechRecognition initialized successfully')
+        }
+      } catch (error) {
+        console.error('[Voice] Failed to initialize SpeechRecognition:', error)
       }
     }
   }
@@ -34,32 +41,54 @@ export class VoiceRecognition {
     onError: (error: string) => void,
     onEnd: () => void
   ): void {
-    if (!this.recognition || this.isListening) return
+    if (!this.recognition) {
+      console.error('[Voice] Recognition not initialized')
+      onError('Speech recognition not available')
+      return
+    }
+    
+    if (this.isListening) {
+      console.warn('[Voice] Already listening')
+      return
+    }
 
+    console.log('[Voice] Starting recognition...')
     this.isListening = true
 
     this.recognition.onresult = (event: any) => {
       const result = event.results[event.resultIndex]
       const transcript = result[0].transcript
       const isFinal = result.isFinal
+      console.log('[Voice] Result:', { transcript, isFinal })
       onResult(transcript, isFinal)
     }
 
     this.recognition.onerror = (event: any) => {
+      console.error('[Voice] Recognition error event:', event)
       this.isListening = false
-      onError(event.error)
+      onError(event.error || 'Unknown error')
     }
 
     this.recognition.onend = () => {
+      console.log('[Voice] Recognition ended')
       this.isListening = false
       onEnd()
     }
 
     try {
+      // Check if we're in a secure context (HTTPS)
+      if (typeof window !== 'undefined' && !window.isSecureContext) {
+        console.error('[Voice] Not in secure context (HTTPS required)')
+        onError('Microphone access requires HTTPS')
+        return
+      }
+      
       this.recognition.start()
-    } catch (error) {
+      console.log('[Voice] Recognition started successfully')
+    } catch (error: any) {
+      console.error('[Voice] Failed to start recognition:', error)
       this.isListening = false
-      onError('Failed to start recognition')
+      onError(error.message || 'Failed to start recognition')
     }
   }
 

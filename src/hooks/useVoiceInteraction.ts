@@ -64,7 +64,17 @@ export function useVoiceInteraction({
 
   // Handle voice recognition
   const startListening = useCallback(() => {
-    if (!recognitionRef.current || !enabled || !voiceSettings.enabled) return
+    console.log('[Voice] Starting voice recognition...', {
+      recognitionAvailable: !!recognitionRef.current,
+      enabled,
+      voiceSettingsEnabled: voiceSettings.enabled,
+      isSupported
+    })
+    
+    if (!recognitionRef.current || !enabled || !voiceSettings.enabled) {
+      console.log('[Voice] Cannot start - missing requirements')
+      return
+    }
     
     setVoiceError(null)
     setTranscript('')
@@ -91,21 +101,28 @@ export function useVoiceInteraction({
         }
       },
       (error) => {
+        console.error('[Voice] Recognition error:', error)
         setVoiceError(error)
         setVoiceState('idle')
         
-        // Handle common errors
+        // Handle common errors with more specific messages
         if (error === 'not-allowed') {
-          setVoiceError('Microphone access denied. Please enable microphone permissions.')
+          setVoiceError('Microphone access denied. Please enable microphone permissions in your browser settings.')
         } else if (error === 'network') {
-          setVoiceError('Network error. Please check your connection.')
+          setVoiceError('Speech recognition service unavailable. Please try again.')
+        } else if (error === 'no-speech') {
+          setVoiceError('No speech detected. Please try again.')
+        } else if (error === 'aborted') {
+          setVoiceError('Speech recognition was cancelled.')
+        } else {
+          setVoiceError(`Voice error: ${error}`)
         }
       },
       () => {
         setVoiceState('idle')
       }
     )
-  }, [enabled, voiceSettings.enabled, onTranscript, onCommand])
+  }, [enabled, voiceSettings.enabled, onTranscript, onCommand, isSupported])
 
   const stopListening = useCallback(() => {
     if (recognitionRef.current) {
