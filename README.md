@@ -98,3 +98,18 @@ src/
 - Run type checking: `npm run type-check`
 - Run linting: `npm run lint`
 - Build for production: `npm run build`
+
+## Deployment (Render.com)
+
+1. Fork or connect this repository to your GitHub account
+2. Create a new Web Service on [Render](https://render.com)
+3. Connect your GitHub repository
+4. Use these settings:
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+   - **Environment Variables**:
+     - `OPENAI_API_KEY`: Your OpenAI API key (required)
+     - `NODE_ENV`: `production`
+5. Deploy!
+
+**Note**: In the demo deployment, sessions are not persisted between restarts. For production use, consider adding a database for session storage.
