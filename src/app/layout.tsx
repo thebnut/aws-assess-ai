@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import Footer from './components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'AI Information Gatherer',
-  description: 'AI-driven information gathering web application',
+  title: 'AWS Migration Assessment Tool',
+  description: 'AI-driven AWS migration assessment tool by Mantel Group',
 }
 
 export default function RootLayout({
@@ -16,7 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="min-h-screen pb-16">
+          {children}
+        </div>
+        <Footer />
+      </body>
     </html>
   )
 }
