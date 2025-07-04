@@ -207,34 +207,43 @@ export default function SessionPage() {
     <div className="flex flex-col h-screen">
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex items-center justify-between py-4">
-          <div>
-            <h1 className="text-xl font-semibold">
-              Assessment for {session.context.clientName} - {session.context.projectName}
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              {session.progress.answered} of {session.progress.total} questions answered
-            </p>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-32 h-2 bg-secondary rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-primary transition-all duration-300"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-              <span className="text-sm font-medium">{progressPercent}%</span>
+        <div className="container">
+          {process.env.NODE_ENV === 'production' && (
+            <div className="bg-amber-50 dark:bg-amber-950 border-b border-amber-200 dark:border-amber-800 py-2 px-4 text-center">
+              <p className="text-xs text-amber-800 dark:text-amber-200">
+                <strong>Demo Mode:</strong> Complete your assessment in one session - progress is not saved permanently.
+              </p>
+            </div>
+          )}
+          <div className="flex items-center justify-between py-4">
+            <div>
+              <h1 className="text-xl font-semibold">
+                Assessment for {session.context.clientName} - {session.context.projectName}
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                {session.progress.answered} of {session.progress.total} questions answered
+              </p>
             </div>
             
-            <button
-              onClick={handleExport}
-              className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-secondary"
-            >
-              <Download className="h-4 w-4" />
-              Export
-            </button>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-32 h-2 bg-secondary rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-primary transition-all duration-300"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+                <span className="text-sm font-medium">{progressPercent}%</span>
+              </div>
+              
+              <button
+                onClick={handleExport}
+                className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-secondary"
+              >
+                <Download className="h-4 w-4" />
+                Export
+              </button>
+            </div>
           </div>
         </div>
       </header>

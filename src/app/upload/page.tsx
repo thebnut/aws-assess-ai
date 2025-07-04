@@ -165,6 +165,15 @@ export default function UploadPage() {
           </p>
         </div>
 
+        {process.env.NODE_ENV === 'production' && (
+          <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+            <p className="text-sm text-amber-800 dark:text-amber-200">
+              <strong>Note:</strong> Assessments should be completed in a single session. 
+              Progress is not permanently saved between sessions in this demo environment.
+            </p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <div>

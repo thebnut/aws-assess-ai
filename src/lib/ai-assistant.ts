@@ -2,9 +2,12 @@ import OpenAI from 'openai'
 import { Session, Question, ChatMessage } from '@/types'
 import { getNextUnansweredQuestion, getQuestionsByCategory } from './sessions'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// Initialize OpenAI with error handling
+const openai = process.env.OPENAI_API_KEY 
+  ? new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+  : null
 
 interface AIResponse {
   response: string
@@ -19,6 +22,14 @@ export async function processUserMessage(
   userMessage: string,
   chatHistory: ChatMessage[]
 ): Promise<AIResponse> {
+  if (!openai) {
+    console.error('OpenAI API key not configured')
+    return {
+      response: "I'm sorry, but the AI service is not properly configured. Please ensure the OPENAI_API_KEY environment variable is set.",
+      shouldUpdateAnswer: false
+    }
+  }
+
   const currentQuestion = findCurrentQuestion(session.questions, chatHistory)
   const nextQuestion = getNextUnansweredQuestion(session.questions)
   

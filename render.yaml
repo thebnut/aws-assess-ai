@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: aws-assess-ai
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: OPENAI_API_KEY
+        sync: false # Set this in the Render dashboard for security
+      - key: NEXT_PUBLIC_BASE_URL
+        value: https://aws-assess-ai.onrender.com # Update with your actual URL
+    autoDeploy: true # Auto-deploy on push to main branch
