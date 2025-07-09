@@ -52,6 +52,16 @@ export async function processUserMessage(
     return result
   } catch (error) {
     console.error('OpenAI API error:', error)
+    // Log more details about the error
+    if (error instanceof Error) {
+      console.error('Error message:', error.message)
+      console.error('Error stack:', error.stack)
+    }
+    // Check if it's an OpenAI specific error
+    if (error && typeof error === 'object' && 'status' in error) {
+      console.error('API Status:', (error as any).status)
+      console.error('API Response:', (error as any).response)
+    }
     return {
       response: "I'm having trouble processing your message. Could you please try again?",
       shouldUpdateAnswer: false
